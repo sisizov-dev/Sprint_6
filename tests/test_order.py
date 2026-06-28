@@ -1,63 +1,44 @@
-from pages.base_page import BasePage
-from selenium.webdriver.common.by import By
+import pytest
+from pages.order_page import OrderPage
+from locators.order_page_locators import OrderPageLocators
 
 
-class OrderPage(BasePage):
+class TestOrder:
 
-    def __init__(self, driver, locators):
-        super().__init__(driver)
-        self.locators = locators
+    @pytest.mark.parametrize("button_position, name, surname, address, station, phone, date, period, color", [
+        ("top", "Олег", "Кузин", "г. Москва, ул. Зорге, д. 5", "Фрунзенская", "+79995554444", "15", "двое суток", "black"),
+        ("bottom", "Ольга", "Михеева", "Московская обл., г. Красногорск, ул. Витте, д. 7", "Митино", "+79998882233", "20", "семеро суток", "grey")
+    ])
+    def test_order_flow(self, driver, button_position, name, surname, address, station, phone, date, period, color):
+        order_page = OrderPage(driver, OrderPageLocators)
 
-    def click_order_button_top(self):
-        self.click(self.locators.ORDER_BUTTON_TOP)
+        # Принимаем куки перед кликом по кнопке
+        from pages.main_page import MainPage
+        from locators.main_page_locators import MainPageLocators
+        main_page = MainPage(driver, MainPageLocators)
+        main_page.accept_cookies()
 
-    def click_order_button_bottom(self):
-        self.click(self.locators.ORDER_BUTTON_BOTTOM)
+        if button_position == "top":
+            order_page.click_order_button_top()
+        else:
+            order_page.click_order_button_bottom()
 
-    def fill_name(self, name):
-        self.send_keys(self.locators.INPUT_NAME, name)
+        order_page.fill_name(name)
+        order_page.fill_surname(surname)
+        order_page.fill_address(address)
+        order_page.select_metro(station)
+        order_page.fill_phone(phone)
+        order_page.click_next()
 
-    def fill_surname(self, surname):
-        self.send_keys(self.locators.INPUT_SURNAME, surname)
+        order_page.select_date(date)
+        order_page.select_rental_period(period)
 
-    def fill_address(self, address):
-        self.send_keys(self.locators.INPUT_ADDRESS, address)
+        if color == "black":
+            order_page.select_color_black()
+        else:
+            order_page.select_color_grey()
 
-    def fill_phone(self, phone):
-        self.send_keys(self.locators.INPUT_PHONE, phone)
+        order_page.click_order()
+        order_page.click_yes()
 
-    def select_metro(self, station):
-        self.click(self.locators.INPUT_METRO)
-        locator = (self.locators.METRO_OPTION[0], self.locators.METRO_OPTION[1].format(station))
-        self.click(locator)
-
-    def select_date(self, day):
-        self.click(self.locators.INPUT_DATE)
-        locator = (By.XPATH, f"//div[contains(@class, 'react-datepicker__day') and text()='{day}']")
-        self.click(locator)
-
-    def select_rental_period(self, period):
-        self.click(self.locators.INPUT_RENTAL_PERIOD)
-        locator = (self.locators.RENTAL_OPTION[0], self.locators.RENTAL_OPTION[1].format(period))
-        self.click(locator)
-
-    def select_color_black(self):
-        self.click(self.locators.COLOR_BLACK)
-
-    def select_color_grey(self):
-        self.click(self.locators.COLOR_GREY)
-
-    def click_next(self):
-        self.click(self.locators.BUTTON_NEXT)
-
-    def click_order(self):
-        self.click(self.locators.BUTTON_ORDER)
-
-    def click_yes(self):
-        self.click(self.locators.BUTTON_YES)
-
-    def get_success_message(self):
-        return self.get_text(self.locators.SUCCESS_MESSAGE)
-
-    def is_success_displayed(self):
-        return self.is_element_visible(self.locators.SUCCESS_MESSAGE)
+        assert order_page.is_success_displayed(), "Сообщение об успешном заказе не отображается"
