@@ -28,8 +28,7 @@ class OrderPage(BasePage):
 
     def select_metro(self, station):
         self.click(self.locators.INPUT_METRO)
-        locator = (self.locators.METRO_OPTION[0], self.locators.METRO_OPTION[1].format(station))
-        self.click(locator)
+        self.click(self.locators.metro_station(station))
 
     def select_date(self, day):
         self.click(self.locators.INPUT_DATE)
@@ -61,3 +60,6 @@ class OrderPage(BasePage):
 
     def is_success_displayed(self):
         return self.is_element_visible(self.locators.SUCCESS_MESSAGE)
+    
+    def click_scooter_logo(self):
+        self.click(self.locators.SCOOTER_LOGO)
