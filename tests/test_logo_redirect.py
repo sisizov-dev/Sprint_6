@@ -3,7 +3,8 @@ from pages.main_page import MainPage
 from pages.order_page import OrderPage
 from locators.main_page_locators import MainPageLocators
 from locators.order_page_locators import OrderPageLocators
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class TestLogoRedirect:
 
@@ -14,6 +15,8 @@ class TestLogoRedirect:
         
         driver.switch_to.window(driver.window_handles[1])
         
+        WebDriverWait(driver, 10).until(EC.url_contains("dzen.ru"))   
+
         assert "dzen.ru" in driver.current_url
 
     def test_scooter_logo_redirect(self, driver):
