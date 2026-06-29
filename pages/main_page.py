@@ -25,3 +25,6 @@ class MainPage(BasePage):
     def is_answer_visible(self, index):
         locator = (self.locators.ANSWER[0], self.locators.ANSWER[1].format(index))
         return self.is_element_visible(locator)
+    
+    def click_yandex_logo(self):
+        self.click(self.locators.YANDEX_LOGO)
