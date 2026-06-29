@@ -1,10 +1,14 @@
 import pytest
 from pages.main_page import MainPage
 from locators.main_page_locators import MainPageLocators
+import allure
 
-
+@allure.feature("Вопросы о важном")
 class TestFaq:
 
+    @allure.title("Проверка открытия текста ответа на вопрос")
+    @allure.description("При клике на вопрос должен открываться соответствующий текст")
+    @allure.story("Аккордеон")
     @pytest.mark.parametrize("index, expected_part", [
         (0, "400 рублей"),
         (1, "один заказ — один самокат"),
