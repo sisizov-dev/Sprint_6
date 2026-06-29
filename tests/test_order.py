@@ -1,10 +1,14 @@
 import pytest
 from pages.order_page import OrderPage
 from locators.order_page_locators import OrderPageLocators
+import allure
 
-
+@allure.feature("Заказ самоката")
 class TestOrder:
-
+    
+    @allure.title("Позитивный сценарий заказа самоката")
+    @allure.description("Проверка полного флоу заказа с двумя наборами данных")
+    @allure.story("Оформление заказа")
     @pytest.mark.parametrize("button_position, name, surname, address, station, phone, date, period, color", [
         ("top", "Олег", "Кузин", "г. Москва, ул. Зорге, д. 5", "Фрунзенская", "+79995554444", "15", "двое суток", "black"),
         ("bottom", "Ольга", "Михеева", "Московская обл., г. Красногорск, ул. Витте, д. 7", "Митино", "+79998882233", "20", "семеро суток", "grey")
@@ -12,7 +16,7 @@ class TestOrder:
     def test_order_flow(self, driver, button_position, name, surname, address, station, phone, date, period, color):
         order_page = OrderPage(driver, OrderPageLocators)
 
-        # Принимаем куки перед кликом по кнопке
+        
         from pages.main_page import MainPage
         from locators.main_page_locators import MainPageLocators
         main_page = MainPage(driver, MainPageLocators)
