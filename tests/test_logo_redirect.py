@@ -1,0 +1,27 @@
+import pytest
+from pages.main_page import MainPage
+from pages.order_page import OrderPage
+from locators.main_page_locators import MainPageLocators
+from locators.order_page_locators import OrderPageLocators
+
+
+class TestLogoRedirect:
+
+    def test_yandex_logo_redirect(self, driver):
+        main_page = MainPage(driver, MainPageLocators)
+        main_page.accept_cookies()
+        main_page.click_yandex_logo()
+        
+        driver.switch_to.window(driver.window_handles[1])
+        
+        assert "dzen.ru" in driver.current_url
+
+    def test_scooter_logo_redirect(self, driver):
+        main_page = MainPage(driver, MainPageLocators)
+        main_page.accept_cookies()
+        
+        order_page = OrderPage(driver, OrderPageLocators)
+        order_page.click_order_button_top()
+        order_page.click_scooter_logo()
+        
+        assert "qa-scooter.praktikum-services.ru" in driver.current_url
