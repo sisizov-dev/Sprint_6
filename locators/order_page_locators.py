@@ -15,14 +15,13 @@ class OrderPageLocators:
     INPUT_METRO = (By.XPATH, "//input[@placeholder='* Станция метро']")
     INPUT_PHONE = (By.XPATH, "//input[@placeholder='* Телефон: на него позвонит курьер']")
     
-    # Метро (выпадающий список)
-    METRO_DROPDOWN = (By.CLASS_NAME, "select-search__select")
-    METRO_OPTION = (By.XPATH, "//button[contains(@class, 'Order_SelectOption__') and contains(text(), '{}')]")
+    # Станции метро (универсальный поиск от наставника)
+    @staticmethod
+    def metro_station(station_name):
+        return (By.XPATH, f"//li//div[contains(text(), '{station_name}')]")
     
     # Дата аренды
     INPUT_DATE = (By.XPATH, "//input[@placeholder='* Когда привезти самокат']")
-    DATE_PICKER = ((By.XPATH, "//div[contains(@class, 'react-datepicker__day') and text()='{}']"))
-    DATE_PICKER_SELECTED = (By.CLASS_NAME, "react-datepicker__day--selected")
     
     # Сроки аренды
     INPUT_RENTAL_PERIOD = (By.CLASS_NAME, "Dropdown-placeholder")
@@ -37,6 +36,8 @@ class OrderPageLocators:
     BUTTON_ORDER = (By.XPATH, "//button[contains(@class, 'Button_Middle') and contains(text(), 'Заказать')]")
     BUTTON_YES = (By.XPATH, "//button[contains(text(), 'Да')]")
     
-    
     # Сообщение об успехе
     SUCCESS_MESSAGE = (By.XPATH, "//div[contains(@class, 'Order_ModalHeader') and contains(text(), 'Заказ оформлен')]")
+
+    # логотип самокат
+    SCOOTER_LOGO = (By.XPATH, "//a[contains(@class, 'Header_LogoScooter__')]")
